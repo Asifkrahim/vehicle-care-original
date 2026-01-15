@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleCare - Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-wrapper">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <svg class="header-vehicle-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="15" y="50" width="70" height="20" rx="5" class="car-body"/>
+                        <rect x="30" y="30" width="40" height="20" rx="5" class="car-top"/>
+                        <circle cx="30" cy="72" r="10" class="car-wheel"/>
+                        <circle cx="70" cy="72" r="10" class="car-wheel"/>
+                    </svg>
+                    <h1>VehicleCare Dashboard</h1>
+                </div>
+                <div class="header-user">
+                    <button class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Navigation Tabs -->
+            <nav class="dashboard-nav">
+                <button class="nav-tab active" data-tab="overview">Overview</button>
+                <button class="nav-tab" data-tab="maintenance">Maintenance</button>
+                <button class="nav-tab" data-tab="schedule">Service Schedule</button>
+                <button class="nav-tab" data-tab="history">History</button>
+            </nav>
+
+            <!-- Overview Tab -->
+            <section class="tab-content active" id="overview">
+                <div class="overview-grid">
+                    <!-- Vehicle Info Card -->
+                    <div class="info-card vehicle-info-card">
+                        <div class="card-header">
+                            <h2>Vehicle Information</h2>
+                            <button class="edit-btn" data-edit="vehicle">Edit</button>
+                        </div>
+                        <div class="vehicle-info-content">
+                            <div class="info-item">
+                                <label>Vehicle Type</label>
+                                <input type="text" id="vehicleType" placeholder="e.g., Car, SUV, Truck" class="info-input" readonly>
+                            </div>
+                            <div class="info-item">
+                                <label>Make & Model</label>
+                                <input type="text" id="vehicleModel" placeholder="e.g., Toyota Camry 2020" class="info-input" readonly>
+                            </div>
+                            <div class="info-item">
+                                <label>License Plate</label>
+                                <input type="text" id="licensePlate" placeholder="e.g., ABC-1234" class="info-input" readonly>
+                            </div>
+                            <div class="info-item">
+                                <label>Current Odometer (km)</label>
+                                <input type="number" id="currentOdometer" placeholder="0" class="info-input" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats Card -->
+                    <div class="info-card stats-card">
+                        <h2>Quick Stats</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalServices">0</div>
+                                <div class="stat-label">Total Services</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="servicesThisYear">0</div>
+                                <div class="stat-label">This Year</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="upcomingServices">0</div>
+                                <div class="stat-label">Upcoming</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalCost">$0</div>
+                                <div class="stat-label">Total Cost</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Services -->
+                <div class="info-card upcoming-card">
+                    <h2>📋 Upcoming Services</h2>
+                    <div class="upcoming-list" id="upcomingList">
+                        <p class="empty-state">No upcoming services. Add maintenance records to see predictions.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Maintenance Tab -->
+            <section class="tab-content" id="maintenance">
+                <div class="maintenance-container">
+                    <!-- Add Maintenance Form -->
+                    <div class="info-card form-card">
+                        <h2>Add Maintenance Record</h2>
+                        <form id="maintenanceForm" class="maintenance-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="serviceType">Service Type *</label>
+                                    <select id="serviceType" class="form-control" required>
+                                        <option value="">Select Service Type</option>
+                                        <option value="Oil Change">Oil Change</option>
+                                        <option value="Air Filter">Air Filter Replacement</option>
+                                        <option value="Tire Rotation">Tire Rotation</option>
+                                        <option value="Brake Service">Brake Service</option>
+                                        <option value="Battery">Battery Replacement</option>
+                                        <option value="Coolant Flush">Coolant Flush</option>
+                                        <option value="Transmission Fluid">Transmission Fluid</option>
+                                        <option value="Spark Plugs">Spark Plugs</option>
+                                        <option value="Inspection">General Inspection</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="serviceDate">Service Date *</label>
+                                    <input type="date" id="serviceDate" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="odometerReading">Odometer Reading (km) *</label>
+                                    <input type="number" id="odometerReading" class="form-control" placeholder="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="serviceCost">Service Cost ($)</label>
+                                    <input type="number" id="serviceCost" class="form-control" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="serviceProvider">Service Provider</label>
+                                    <input type="text" id="serviceProvider" class="form-control" placeholder="e.g., ABC Auto Service">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nextServiceKm">Next Service Due (km)</label>
+                                    <input type="number" id="nextServiceKm" class="form-control" placeholder="Auto-calculated">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="serviceNotes">Notes</label>
+                                    <textarea id="serviceNotes" class="form-control" placeholder="Add any additional notes..." rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="auth-button">Add Maintenance Record</button>
+                        </form>
+                    </div>
+
+                    <!-- Maintenance Records Table -->
+                    <div class="info-card records-card">
+                        <h2>Maintenance Records</h2>
+                        <div class="table-wrapper">
+                            <table class="maintenance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Service Type</th>
+                                        <th>Date</th>
+                                        <th>Odometer (km)</th>
+                                        <th>Cost</th>
+                                        <th>Provider</th>
+                                        <th>Next Due (km)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="maintenanceTableBody">
+                                    <tr class="empty-row">
+                                        <td colspan="7" class="empty-state">No maintenance records yet. Add your first service above.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Service Schedule Tab -->
+            <section class="tab-content" id="schedule">
+                <div class="info-card schedule-card">
+                    <h2>📅 Service Schedule & Predictions</h2>
+                    <div class="schedule-info">
+                        <p>This section shows recommended service intervals based on your vehicle's history and industry standards.</p>
+                    </div>
+                    
+                    <div class="schedule-grid" id="scheduleGrid">
+                        <!-- Service schedule items will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Service Interval Reference -->
+                <div class="info-card reference-card">
+                    <h2>Standard Service Intervals</h2>
+                    <div class="interval-table">
+                        <div class="interval-item">
+                            <div class="interval-type">Oil Change</div>
+                            <div class="interval-value">Every 5,000-8,000 km</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Air Filter</div>
+                            <div class="interval-value">Every 15,000-30,000 km</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Tire Rotation</div>
+                            <div class="interval-value">Every 10,000 km</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Brake Service</div>
+                            <div class="interval-value">Every 50,000 km or as needed</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Battery</div>
+                            <div class="interval-value">Every 3-5 years</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Coolant Flush</div>
+                            <div class="interval-value">Every 40,000-80,000 km</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Transmission Fluid</div>
+                            <div class="interval-value">Every 60,000-100,000 km</div>
+                        </div>
+                        <div class="interval-item">
+                            <div class="interval-type">Spark Plugs</div>
+                            <div class="interval-value">Every 30,000-100,000 km</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Tab -->
+            <section class="tab-content" id="history">
+                <div class="info-card history-card">
+                    <h2>Service History</h2>
+                    <div class="timeline" id="timeline">
+                        <p class="empty-state">No service history yet. Add maintenance records to see your vehicle's history.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Vehicle Modal -->
+    <div class="modal" id="editVehicleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Vehicle Information</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="editVehicleForm" class="modal-form">
+                <div class="form-group">
+                    <label for="editVehicleType">Vehicle Type</label>
+                    <input type="text" id="editVehicleType" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleModel">Make & Model</label>
+                    <input type="text" id="editVehicleModel" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editLicensePlate">License Plate</label>
+                    <input type="text" id="editLicensePlate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCurrentOdometer">Current Odometer (km)</label>
+                    <input type="number" id="editCurrentOdometer" class="form-control" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="auth-button">Save Changes</button>
+                    <button type="button" class="modal-cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

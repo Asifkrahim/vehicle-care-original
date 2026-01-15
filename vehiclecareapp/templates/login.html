@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VehicleCare - Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="auth-body">
+
+<div class="auth-wrapper">
+    <div class="auth-container login-container">
+
+        <div class="logo-container">
+            <!-- Your SVG stays SAME -->
+        </div>
+
+        <div class="form-content">
+            <h1 class="auth-title">VehicleCare</h1>
+            <p class="auth-subtitle">Your Vehicle, Our Care</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="error-msg">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <form class="auth-form" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email"
+                           placeholder="Enter your email"
+                           class="form-input" required>
+                    <span class="input-border"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password"
+                           placeholder="Enter your password"
+                           class="form-input" required>
+                    <span class="input-border"></span>
+                </div>
+
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+
+            <p class="auth-footer">
+                Don’t have an account?
+                <a href="{% url 'signup' %}" class="auth-link">Sign up here</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
